@@ -1,0 +1,19 @@
+# These keys are global and are received by all app modules.
+global:
+  instance_name: "test1"
+  metric_prefix: "gnmi_test"
+  listen_address: "0.0.0.0"
+  listen_port: 9456
+  scrape_interval: 10
+
+# These keys are shared among all devices.
+device_template:
+  port: 6030
+  user: "admin"
+  password: "admin"
+
+# These keys are device-specific and take precedence over the device_template section.
+devices:
+  - name: "CE1"
+    ip: "ce1.vmx.lab"
+    plugins: ["oc_interfaces"]

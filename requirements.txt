@@ -1,0 +1,7 @@
+prometheus-client==0.17.1
+PyYAML==6.0.1
+types-PyYAML==6.0.12.12
+mypy==1.6.1
+grpcio==1.59.0
+grpcio-tools==1.59.0
+types-protobuf==4.24.0.2
