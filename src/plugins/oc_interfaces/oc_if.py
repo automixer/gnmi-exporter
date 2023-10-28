@@ -65,7 +65,7 @@ class IfaceTable:
 
             # Fill up the newly created record with the template
             for label in label_tpl:
-                self.table[if_full_name][label] = 'not_av'
+                self.table[if_full_name][label] = ''
             for metric in metric_tpl:
                 self.table[if_full_name][metric] = 0
 
@@ -214,6 +214,8 @@ class OcInterfaces(base_plug.BasePlugin):
             if re.match('interfacesinterfacesubinterfacessubinterfacestate', path_str):
                 if update.path[-1] in _SUBIFACE_LABEL_SET:
                     value = str(update.val)
+                    if update.path[-1] == 'name':
+                        value = update.get_path_key(*_IFACE_PATH_NAME)
                 elif update.path[-1] in _SUBIFACE_METRIC_SET:
                     value = int(update.val)  # type: ignore
                 else:
@@ -240,7 +242,7 @@ class OcInterfaces(base_plug.BasePlugin):
                 # get value and timestamp
                 gnmi_metric.val = self.iface_table.get_entry(if_name=iface, entry_name=metric)
                 # TODO: Timestamp was lost somewhere and not available here... Fix it!
-                gnmi_metric.ts = time.time_ns()
+                gnmi_metric.ts = time.time()
                 self.iface_metrics_table.add_metric(name=metric, metric=gnmi_metric)
 
         # Subinterfaces
@@ -256,7 +258,7 @@ class OcInterfaces(base_plug.BasePlugin):
                 # get value and timestamp
                 gnmi_metric.val = self.subiface_table.get_entry(if_name=iface, entry_name=metric)
                 # TODO: Timestamp was lost somewhere and not available here... Fix it!
-                gnmi_metric.ts = time.time_ns()
+                gnmi_metric.ts = time.time()
                 self.subiface_metrics_table.add_metric(name=metric, metric=gnmi_metric)
 
     def build_bundle_list(self) -> None:
@@ -268,11 +270,27 @@ class OcInterfaces(base_plug.BasePlugin):
         for label in _PLUGIN_LABEL_SET + _IFACE_LABEL_SET:
             label_set.append(label.replace('-', '_'))
         for name in _IFACE_METRIC_SET:
+            metric_name = ''.join([self.config.metric_prefix, '_iface_', name.replace('-', '_')])
             bundle = common_types.GnmiMetricBundle(type=common_types.GnmiMetricType.COUNTER,
                                                    device_name=self.config.dev_name,
-                                                   metric_name=name.replace('-', '_'),
+                                                   metric_name=metric_name,
                                                    labelset=label_set)
             for metric in self.iface_metrics_table.get_metrics(name=name):
+                bundle.metrics.append(metric)
+
+            self.bundle_list.append(bundle)
+
+        # Subinterfaces
+        label_set = []
+        for label in _PLUGIN_LABEL_SET + _SUBIFACE_LABEL_SET:
+            label_set.append(label.replace('-', '_'))
+        for name in _SUBIFACE_METRIC_SET:
+            metric_name = ''.join([self.config.metric_prefix, '_subiface_', name.replace('-', '_')])
+            bundle = common_types.GnmiMetricBundle(type=common_types.GnmiMetricType.COUNTER,
+                                                   device_name=self.config.dev_name,
+                                                   metric_name=metric_name,
+                                                   labelset=label_set)
+            for metric in self.subiface_metrics_table.get_metrics(name=name):
                 bundle.metrics.append(metric)
 
             self.bundle_list.append(bundle)

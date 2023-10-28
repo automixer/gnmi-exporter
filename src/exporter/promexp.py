@@ -156,7 +156,7 @@ class PromClient(Collector):
                              labelset=['instance_name'],
                              metrics=[GnmiMetric(labelval=[self._config.instance_name],
                                                  val=len(self._plugin_list),
-                                                 ts=time.time_ns())])
+                                                 ts=time.time())])
         self._bundle_table['configured_devices'] = g
 
         # Collect devices
@@ -166,7 +166,7 @@ class PromClient(Collector):
                              labelset=['instance_name'],
                              metrics=[GnmiMetric(labelval=[self._config.instance_name],
                                                  val=self._collected_devices,
-                                                 ts=time.time_ns())])
+                                                 ts=time.time())])
         self._bundle_table['collected_devices'] = g
 
         # Collected plugins
@@ -176,7 +176,7 @@ class PromClient(Collector):
                              labelset=['instance_name'],
                              metrics=[GnmiMetric(labelval=[self._config.instance_name],
                                                  val=self._collected_plugins,
-                                                 ts=time.time_ns())])
+                                                 ts=time.time())])
         self._bundle_table['collected_plugins'] = g
 
         # Collected metrics
@@ -186,7 +186,7 @@ class PromClient(Collector):
                              labelset=['instance_name'],
                              metrics=[GnmiMetric(labelval=[self._config.instance_name],
                                                  val=len(self._bundle_table) + 1,  # +1 is this metric
-                                                 ts=time.time_ns())])
+                                                 ts=time.time())])
         self._bundle_table['collected_metrics'] = g
 
         # Collected series
@@ -200,7 +200,7 @@ class PromClient(Collector):
                              labelset=['instance_name'],
                              metrics=[GnmiMetric(labelval=[self._config.instance_name],
                                                  val=collected_series,
-                                                 ts=time.time_ns())])
+                                                 ts=time.time())])
         self._bundle_table['collected_series'] = g
 
     def _parse_config(self, global_cfg: dict) -> None:

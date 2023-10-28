@@ -14,6 +14,11 @@ device_template:
 
 # These keys are device-specific and take precedence over the device_template section.
 devices:
-  - name: "CE1"
-    ip: "ce1.vmx.lab"
+  - name: "RR1"
+    ip: "rr1.vmx.lab"
     plugins: ["oc_interfaces"]
+    force_encoding: "PROTO"
+    bypass_msg_routing: true
+    port: 50051
+    user: "admin"
+    password: "admin1"

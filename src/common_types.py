@@ -31,7 +31,7 @@ class GnmiMetric:
     """Single metric data"""
     labelval: list[str] = dataclasses.field(default_factory=list)
     val: int = 0
-    ts: int = 0
+    ts: float = 0.0
 
 
 class GnmiMetricType(Enum):
