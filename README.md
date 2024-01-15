@@ -1,5 +1,7 @@
 # gnmi-exporter
 
+**THIS PROJECT HAS BEEN SUPERSEDED BY** https://github.com/automixer/gtexporter  
+
 This application allows you to export gNMI streaming telemetries from network devices to Prometheus, 
 in a data-model-aware way.  
 The application is designed around the "DataModel-conscious Plugin module" concept:  
